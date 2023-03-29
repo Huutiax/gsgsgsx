@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .design-img {
+        display: inline-block;
+        vertical-align: middle;
+        width: 100%;
+        height: auto;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      /* .design-viewer {
+        flex: 1;
+        height: 100%;
+        max-width: 600px;
+      } */
+      .svg-viewer > svg {
+        width: 100%;
+        height: auto;
+      }
+      .thumbnail-list {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        gap: 10px;
+        flex-direction: column;
+      }
+      .thumbnail-list .item {
+        width: 380px;
+        height: 400px;
+        cursor: pointer;
+        font-size: 12px;
+        text-align: center;
+      }
+      .thumbnail-list .item.is-active > .svg-content {
+        border-color: blue;
+      }
+      .thumbnail-list .item > .svg-content {
+        width: 380px;
+        height: 380px;
+        /* border: 1px solid #ccc; */
+        /* padding: 10px; */
+        box-sizing: border-box;
+        background-color: #fff;
+      }
+      .thumbnail-list .item > .svg-content .viewer {
+        width: 100%;
+        height: 100%;
+      }
+      .thumbnail-list .item > .name {
+        line-height: 20px;
+        text-transform: capitalize;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="design-viewer">
+      <!-- 正面、反面、左臂、右臂图片选择 -->
+      <ul class="thumbnail-list"></ul>
+    </div>
+
+    <script>
+      const printData = {
+        back: {
+          price: 80,
+          x: 240,
+          y: 180,
+          width: 320,
+          height: 320,
+          type: "back",
+          skuImg:
+            "https://callback.erp.bz-bss.com/nft-imgages/T Shirt/白色_fff/back.png",
+          ipImg: "https://cdn2.bz-bss.com/B0DOI/1FSHMEV.png",
+          isPrint: true,
+        },
+        front: {
+          price: 50,
+          x: 440,
+          y: 200,
+          width: 120,
+          height: 120,
+          type: "front",
+          skuImg:
+            "https://callback.erp.bz-bss.com/nft-imgages/T Shirt/白色_fff/front.png",
+          ipImg: "https://cdn2.bz-bss.com/B0DOI/1FSHMEV.png",
+          isPrint: true,
+        },
+      };
+
+      // 渲染正反面喷涂区域
+      function renderPrintArea() {
+        const keyOrderMap = {
+          front: 0,
+          back: 1,
+          left: 2,
+          right: 3,
+        };
+        let html = "",
+          tempItem;
+        for (let key in printData) {
+          tempItem = printData[key];
+          const { x, y, rotate, width, height, skuImg, ipImg } = printData[key];
+
+          html += `<li class="item" style="order: ${keyOrderMap[key]}">
+            <div class="svg-content">
+              <svg viewBox="0 0 800 800" width="800" height="800" class="viewer">
+                <image
+                  xlink:href="${skuImg}"
+                  width="800"
+                  height="800"
+                />
+
+                <g
+                  transform="translate(${x}, ${y}) rotate(${rotate || 0})"
+                  width="${width}"
+                  height="${height}"
+                >
+                  <foreignObject width="${width}" height="${height}" class="design-area">
+                    <div style="width: 100%; height: 100%">
+                      <img
+                        src="${ipImg}"
+                        class="design-img"
+                      />
+                    </div>
+                  </foreignObject>
+                </g>
+              </svg>
+            </div>
+            <div class="name">${key}</div> 
+          </li>`;
+        }
+
+        const list = document.querySelector(".thumbnail-list");
+        list.innerHTML = html;
+      }
+
+      renderPrintArea();
+    </script>
+  </body>
+</html>
